@@ -1,7 +1,6 @@
 from audeamus_bot.commands.command_tree import TBACommandTree
-from audeamus_bot.api import tba
+from audeamus_bot.api import tba_api
 import discord
-import os
 
 intents = discord.Intents.default()
 intents.messages = True
@@ -28,11 +27,6 @@ class FRCClient(discord.Client):
     async def close(self):
         print("Closing")
 
-        if tba.session is not None:
-            await tba.session.close()
+        if tba_api.session is not None:
+            await tba_api.session.close()
         await super().close()
-
-
-
-
-

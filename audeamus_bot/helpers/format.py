@@ -1,10 +1,10 @@
 from datetime import datetime
-import time
 from typing import Optional
 
 import discord
+
+from audeamus_bot.api import tba_api
 from audeamus_bot.types.tba_types import MatchPredictions, MatchSimple
-from audeamus_bot.api import tba
 
 
 def format_matches(matches: list[MatchSimple], title: str, team_number: int = 0,
@@ -27,13 +27,12 @@ def format_matches(matches: list[MatchSimple], title: str, team_number: int = 0,
             alliances_text = ""
         else:
             red_alliance = [(team_key[3:] if str(team_number) != team_key[3:]
-                            else f"__{team_key[3:]}__")
+                             else f"__{team_key[3:]}__")
                             for team_key in match["alliances"]["red"]["team_keys"]]
             blue_alliance = [(team_key[3:] if str(team_number) != team_key[3:]
                               else f"__{team_key[3:]}__")
                              for team_key in match["alliances"]["blue"]["team_keys"]]
 
-            current_time = time.time()
             # If the match score has been updated
             if match["alliances"]["red"]["score"] != -1:
                 red_points = match["alliances"]["red"]["score"]
@@ -127,11 +126,11 @@ def format_playoff_round(matches: list[MatchSimple], title: str) -> discord.Embe
 
 
 async def get_current_event(team_number: int):
-    events = await tba.team_events_year(f"frc{team_number}", 2023)
+    events = await tba_api.team_events_year(f"frc{team_number}", 2023)
     for event in events:
         current_date = datetime.now()
         start_date = datetime.strptime(event["start_date"], "%Y-%m-%d")
         end_date = datetime.strptime(event["end_date"], "%Y-%m-%d")
-        if start_date < current_date and current_date < end_date:
+        if start_date < current_date < end_date:
             return event["event_code"]
     return None

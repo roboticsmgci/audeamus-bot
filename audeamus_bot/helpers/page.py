@@ -1,4 +1,5 @@
-from typing import Any, Callable
+from typing import Callable
+
 import discord
 
 
@@ -12,11 +13,11 @@ class Page(discord.ui.View):
         self.formatter = formatter
 
     @discord.ui.button(label="\N{Black Left-Pointing Triangle}", style=discord.ButtonStyle.gray)
-    async def prev_page(self, interaction: discord.Interaction, button: discord.ui.Button):
+    async def prev_page(self, interaction: discord.Interaction):
         self.page = (self.page - 1) % self.num_pages
         await interaction.response.edit_message(embed=self.formatter(self.page))
 
     @discord.ui.button(label="\N{Black Right-Pointing Triangle}", style=discord.ButtonStyle.gray)
-    async def next_page(self, interaction: discord.Interaction, button: discord.ui.Button):
+    async def next_page(self, interaction: discord.Interaction):
         self.page = (self.page + 1) % self.num_pages
         await interaction.response.edit_message(embed=self.formatter(self.page))

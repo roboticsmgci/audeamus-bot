@@ -47,6 +47,7 @@ class Event(TypedDict):
     playoff_type: Optional[int]
     playoff_type_string: Optional[str]
 
+
 # Prediction Types: may change at any time
 
 

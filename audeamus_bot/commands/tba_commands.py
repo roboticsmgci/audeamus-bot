@@ -123,64 +123,64 @@ class TBACommands(app_commands.Group):
         else:
             await interaction.response.send_message(embed=formatter(0))
 
-    @app_commands.command(description="Gets the playoff bracket of a specific event.")
-    @app_commands.describe(event_key="The event key")
-    async def bracket(self, interaction: discord.Interaction, event_key: str):
-        matches = await tba_api.event_matches_simple(event_key)
-        playoff_matches = sorted(filter(lambda match: match["comp_level"] != "qm", matches),
-                                 key=lambda match: match["set_number"])
-
-        if len(playoff_matches) == 0:
-            embed = discord.Embed(title="Playoff Bracket",
-                                  description="No matches found.")
-            await interaction.response.send_message(embed=embed)
-            return
-
-        if len(playoff_matches) >= 14:
-            num_pages = 8
-        elif len(playoff_matches) >= 13:
-            num_pages = 7
-        elif len(playoff_matches) >= 12:
-            num_pages = 6
-        elif len(playoff_matches) >= 11:
-            num_pages = 5
-        elif len(playoff_matches) >= 10:
-            num_pages = 4
-        elif len(playoff_matches) >= 8:
-            num_pages = 3
-        elif len(playoff_matches) >= 6:
-            num_pages = 2
-        else:
-            num_pages = 1
-
-        def formatter(page: int):
-            if page == 0:
-                return format.format_playoff_round(playoff_matches[:4],
-                                                   f"Upper Round 1 - {event_key} - Page 1/{num_pages}")
-            elif page == 1:
-                return format.format_playoff_round(playoff_matches[4:6],
-                                                   f"Lower Round 1 - {event_key} - Page 2/{num_pages}")
-            elif page == 2:
-                return format.format_playoff_round(playoff_matches[6:8],
-                                                   f"Upper Round 2 - {event_key} - Page 3/{num_pages}")
-            elif page == 3:
-                return format.format_playoff_round(playoff_matches[8:10],
-                                                   f"Lower Round 2 - {event_key} - Page 4/{num_pages}")
-            elif page == 4:
-                return format.format_playoff_round(playoff_matches[10:11],
-                                                   f"Upper Finals - {event_key} - Page 5/{num_pages}")
-            elif page == 5:
-                return format.format_playoff_round(playoff_matches[11:12],
-                                                   f"Lower Round 3 - {event_key} - Page 6/{num_pages}")
-            elif page == 6:
-                return format.format_playoff_round(playoff_matches[12:13],
-                                                   f"Lower Finals - {event_key} - Page 7/{num_pages}")
-            else:
-                return format.format_playoff_round(playoff_matches[13:14],
-                                                   f"Grand Finals - {event_key} - Page 8/{num_pages}")
-
-        if num_pages > 1:
-            view = Page(0, num_pages, formatter)
-            await interaction.response.send_message(embed=formatter(0), view=view)
-        else:
-            await interaction.response.send_message(embed=formatter(0))
+    # @app_commands.command(description="Gets the playoff bracket of a specific event.")
+    # @app_commands.describe(event_key="The event key")
+    # async def bracket(self, interaction: discord.Interaction, event_key: str):
+    #     matches = await tba_api.event_matches_simple(event_key)
+    #     playoff_matches = sorted(filter(lambda match: match["comp_level"] != "qm", matches),
+    #                              key=lambda match: match["set_number"])
+    #
+    #     if len(playoff_matches) == 0:
+    #         embed = discord.Embed(title="Playoff Bracket",
+    #                               description="No matches found.")
+    #         await interaction.response.send_message(embed=embed)
+    #         return
+    #
+    #     if len(playoff_matches) >= 14:
+    #         num_pages = 8
+    #     elif len(playoff_matches) >= 13:
+    #         num_pages = 7
+    #     elif len(playoff_matches) >= 12:
+    #         num_pages = 6
+    #     elif len(playoff_matches) >= 11:
+    #         num_pages = 5
+    #     elif len(playoff_matches) >= 10:
+    #         num_pages = 4
+    #     elif len(playoff_matches) >= 8:
+    #         num_pages = 3
+    #     elif len(playoff_matches) >= 6:
+    #         num_pages = 2
+    #     else:
+    #         num_pages = 1
+    #
+    #     def formatter(page: int):
+    #         if page == 0:
+    #             return format.format_playoff_round(playoff_matches[:4],
+    #                                                f"Upper Round 1 - {event_key} - Page 1/{num_pages}")
+    #         elif page == 1:
+    #             return format.format_playoff_round(playoff_matches[4:6],
+    #                                                f"Lower Round 1 - {event_key} - Page 2/{num_pages}")
+    #         elif page == 2:
+    #             return format.format_playoff_round(playoff_matches[6:8],
+    #                                                f"Upper Round 2 - {event_key} - Page 3/{num_pages}")
+    #         elif page == 3:
+    #             return format.format_playoff_round(playoff_matches[8:10],
+    #                                                f"Lower Round 2 - {event_key} - Page 4/{num_pages}")
+    #         elif page == 4:
+    #             return format.format_playoff_round(playoff_matches[10:11],
+    #                                                f"Upper Finals - {event_key} - Page 5/{num_pages}")
+    #         elif page == 5:
+    #             return format.format_playoff_round(playoff_matches[11:12],
+    #                                                f"Lower Round 3 - {event_key} - Page 6/{num_pages}")
+    #         elif page == 6:
+    #             return format.format_playoff_round(playoff_matches[12:13],
+    #                                                f"Lower Finals - {event_key} - Page 7/{num_pages}")
+    #         else:
+    #             return format.format_playoff_round(playoff_matches[13:14],
+    #                                                f"Grand Finals - {event_key} - Page 8/{num_pages}")
+    #
+    #     if num_pages > 1:
+    #         view = Page(0, num_pages, formatter)
+    #         await interaction.response.send_message(embed=formatter(0), view=view)
+    #     else:
+    #         await interaction.response.send_message(embed=formatter(0))

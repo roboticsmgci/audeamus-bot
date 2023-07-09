@@ -1,3 +1,4 @@
 .env
 api_cache.sqlite
 dist/
+main.py

@@ -1,0 +1,1 @@
+from audeamus_bot.bot import AudeamusBot

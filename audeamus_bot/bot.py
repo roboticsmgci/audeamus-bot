@@ -9,7 +9,7 @@ intents.message_content = True
 MAX_MATCHES_PER_PAGE = 8
 
 
-class FRCClient(discord.Client):
+class AudeamusBot(discord.Client):
     def __init__(self, team_number: int, guild: discord.Object, **kwargs):
         super().__init__(intents=intents, **kwargs)
 

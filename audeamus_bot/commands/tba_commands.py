@@ -123,6 +123,31 @@ class TBACommands(app_commands.Group):
         else:
             await interaction.response.send_message(embed=formatter(0))
 
+    @app_commands.command(description="Creates a tier list for the event based on OPRs")
+    @app_commands.describe(event_key="The event key (ex: 2023onwin)")
+    async def tierlist(self, interaction: discord.Interaction, event_key: str):
+        tiers = ["S", "A", "B", "C", "D", "E", "F"]
+
+        oprs = await tba_api.event_oprs(event_key)
+        ccwms = sorted(oprs["ccwms"].items(), key=lambda item: item[1], reverse=True)
+
+        max_ccwm = max(oprs["ccwms"].values())
+        ccwm_range = max_ccwm - min(oprs["ccwms"].values())
+        breakpoints = [max_ccwm - ccwm_range / len(tiers) * i for i in range(1, len(tiers) + 1)]
+
+        tier_descriptions = []
+        j = 0
+        for i, tier in enumerate(tiers):
+            teams_in_tier = []
+            # Subtraction to deal with float inaccuracy
+            while j < len(ccwms) and ccwms[j][1] >= (breakpoints[i] - 0.001):
+                teams_in_tier.append(ccwms[j][0][3:])
+                j += 1
+            tier_descriptions.append(f"**{tier}**: {', '.join(teams_in_tier)}")
+
+        await interaction.response.send_message(embed=discord.Embed(title=f"Tier List - {event_key}",
+                                                                    description="\n".join(tier_descriptions)))
+
     # @app_commands.command(description="Gets the playoff bracket of a specific event.")
     # @app_commands.describe(event_key="The event key")
     # async def bracket(self, interaction: discord.Interaction, event_key: str):

@@ -220,3 +220,8 @@ class EventSimple(TypedDict):
 
 
 ModelType = Literal["simple", "keys"]
+
+class EventOPRs(TypedDict):
+    oprs: dict[str, float]
+    dprs: dict[str, float]
+    ccwms: dict[str, float]

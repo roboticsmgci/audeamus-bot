@@ -62,7 +62,7 @@ class TBACommands(app_commands.Group):
         matches = await tba_api.team_matches_year_simple(
             f"frc{team_number}", year)
         next_matches = sorted(filter(lambda match: match["predicted_time"] is not None
-                                     and time.time() < match["predicted_time"],
+                                                   and time.time() < match["predicted_time"],
                                      matches),
                               key=lambda event: event["predicted_time"])  # type: ignore
 
@@ -104,7 +104,7 @@ class TBACommands(app_commands.Group):
         matches = await tba_api.team_matches_year_simple(
             f"frc{team_number}", year)
         previous_matches = sorted(filter(lambda match: match["predicted_time"] is not None
-                                         and match["predicted_time"] < time.time(),
+                                                       and match["predicted_time"] < time.time(),
                                          matches),
                                   key=lambda match: match["predicted_time"],  # type: ignore
                                   reverse=True)
@@ -145,8 +145,11 @@ class TBACommands(app_commands.Group):
                 j += 1
             tier_descriptions.append(f"**{tier}**: {', '.join(teams_in_tier)}")
 
+        description = ("The following values are based on CCWM - the estimated number of points that a team contributes"
+                       " to an alliance.\n\n" + "\n".join(tier_descriptions))
+
         await interaction.response.send_message(embed=discord.Embed(title=f"Tier List - {event_key}",
-                                                                    description="\n".join(tier_descriptions)))
+                                                                    description=description))
 
     # @app_commands.command(description="Gets the playoff bracket of a specific event.")
     # @app_commands.describe(event_key="The event key")

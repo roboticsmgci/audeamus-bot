@@ -145,8 +145,8 @@ class TBACommands(app_commands.Group):
                 j += 1
             tier_descriptions.append(f"**{tier}**: {', '.join(teams_in_tier)}")
 
-        description = ("The following values are based on CCWM - the estimated number of points that a team contributes"
-                       " to an alliance.\n\n" + "\n".join(tier_descriptions))
+        description = ("The following values are based on CCWM - Calculated Contribution to Winning Margin.\n\n"
+                       + "\n".join(tier_descriptions))
 
         await interaction.response.send_message(embed=discord.Embed(title=f"Tier List - {event_key}",
                                                                     description=description))

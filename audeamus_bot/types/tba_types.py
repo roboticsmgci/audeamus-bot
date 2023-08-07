@@ -221,7 +221,36 @@ class EventSimple(TypedDict):
 
 ModelType = Literal["simple", "keys"]
 
+
 class EventOPRs(TypedDict):
     oprs: dict[str, float]
     dprs: dict[str, float]
     ccwms: dict[str, float]
+
+
+class WLTRecord(TypedDict):
+    losses: int
+    wins: int
+    ties: int
+
+
+class EventRankingTeam(TypedDict):
+    matches_played: int
+    qual_average: Optional[int]
+    extra_stats: Optional[list[int | float]]
+    sort_orders: Optional[list[int | float]]
+    record: WLTRecord
+    rank: int
+    dq: int
+    team_key: str
+
+
+class StatInfo(TypedDict):
+    name: str
+    precision: int
+
+
+class EventRanking(TypedDict):
+    rankings: list[EventRankingTeam]
+    extra_stats_info: Optional[list[StatInfo]]
+    sort_order_info: list[StatInfo]

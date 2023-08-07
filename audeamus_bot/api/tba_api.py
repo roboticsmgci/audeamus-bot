@@ -5,7 +5,7 @@ from aiohttp_client_cache import SQLiteBackend
 from aiohttp_client_cache.session import CachedSession
 from dotenv import load_dotenv
 
-from audeamus_bot.types.tba_types import Event, EventPredictions, MatchSimple, EventOPRs
+from audeamus_bot.types.tba_types import Event, EventPredictions, MatchSimple, EventOPRs, EventRanking
 
 load_dotenv()
 
@@ -102,3 +102,7 @@ async def team_event_matches(team_key: str, event_key: str):
 
 async def event_oprs(event_key: str) -> EventOPRs:
     return await get_json(f"/event/{event_key}/oprs")
+
+
+async def event_rankings(event_key: str) -> EventRanking:
+    return await get_json(f"/event/{event_key}/rankings")

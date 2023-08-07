@@ -151,6 +151,18 @@ class TBACommands(app_commands.Group):
         await interaction.response.send_message(embed=discord.Embed(title=f"Tier List - {event_key}",
                                                                     description=description))
 
+    @app_commands.command(description="Shows the rankings at a specified event")
+    @app_commands.describe(event_key="The event key (ex: 2023onwin)")
+    async def event_rankings(self, interaction: discord.Interaction, event_key: str):
+        rankings = await tba_api.event_rankings(event_key)
+        sorted_teams = sorted(rankings["rankings"], key=lambda team: team["rank"])
+
+        embed = discord.Embed(title=f"Rankings - {event_key}")
+        for rank, team in enumerate(sorted_teams, start=1):
+            embed.add_field(name=f"{rank}. {team['team_key'][3:]}", value=f"Ranking Score: {round(team['sort_orders'][0], 2)}")
+
+        await interaction.response.send_message(embed=embed)
+
     # @app_commands.command(description="Gets the playoff bracket of a specific event.")
     # @app_commands.describe(event_key="The event key")
     # async def bracket(self, interaction: discord.Interaction, event_key: str):

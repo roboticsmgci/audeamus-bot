@@ -3,8 +3,6 @@ from audeamus_bot.api import tba_api
 import discord
 
 intents = discord.Intents.default()
-intents.messages = True
-intents.message_content = True
 
 MAX_MATCHES_PER_PAGE = 8
 

@@ -254,3 +254,21 @@ class EventRanking(TypedDict):
     rankings: list[EventRankingTeam]
     extra_stats_info: Optional[list[StatInfo]]
     sort_order_info: list[StatInfo]
+
+
+class PointsEvent(TypedDict):
+    district_cmp: bool
+    total: int
+    alliance_points: int
+    elim_points: int
+    award_points: int
+    event_key: str
+    qual_points: int
+
+
+class DistrictRanking(TypedDict):
+    team_key: str
+    rank: int
+    rookie_bonus: Optional[int]
+    point_total: int
+    event_points: Optional[list[PointsEvent]]

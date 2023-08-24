@@ -156,12 +156,45 @@ class TBACommands(app_commands.Group):
     async def event_rankings(self, interaction: discord.Interaction, event_key: str):
         rankings = await tba_api.event_rankings(event_key)
         sorted_teams = sorted(rankings["rankings"], key=lambda team: team["rank"])
+        num_pages = ceil(len(sorted_teams) / 25)
 
-        embed = discord.Embed(title=f"Rankings - {event_key}")
-        for rank, team in enumerate(sorted_teams, start=1):
-            embed.add_field(name=f"{rank}. {team['team_key'][3:]}", value=f"Ranking Score: {round(team['sort_orders'][0], 2)}")
+        def formatter(page: int):
+            page_matches = sorted_teams[page * 25:(page + 1) * 25]
 
-        await interaction.response.send_message(embed=embed)
+            embed = discord.Embed(title=f"Event Rankings - {event_key} - Page {page + 1}/{num_pages}")
+            for rank, team in enumerate(page_matches, start=(page * 25) + 1):
+                embed.add_field(name=f"{rank}. {team['team_key'][3:]}",
+                                value=f"Ranking Score: {round(team['sort_orders'][0], 2)}")
+            return embed
+
+        if num_pages > 1:
+            view = Page(0, num_pages, formatter)
+            await interaction.response.send_message(embed=formatter(0), view=view)
+        else:
+            await interaction.response.send_message(embed=formatter(0))
+
+    @app_commands.command(description="Shows the rankings of a specified district")
+    @app_commands.describe(district_key="The district key (ex: 2023ont)")
+    async def district_rankings(self, interaction: discord.Interaction, district_key: str):
+        rankings = await tba_api.district_rankings(district_key)
+        sorted_teams = sorted(rankings, key=lambda team: team["rank"])
+
+        num_pages = ceil(len(sorted_teams)/25)
+
+        def formatter(page: int):
+            page_matches = sorted_teams[page * 25:(page + 1) * 25]
+
+            embed = discord.Embed(title=f"District Rankings - {district_key} - Page {page+1}/{num_pages}")
+            for rank, team in enumerate(page_matches, start=(page*25)+1):
+                embed.add_field(name=f"{rank}. {team['team_key'][3:]}",
+                                value=f"Points: {round(team['point_total'], 2)}")
+            return embed
+
+        if num_pages > 1:
+            view = Page(0, num_pages, formatter)
+            await interaction.response.send_message(embed=formatter(0), view=view)
+        else:
+            await interaction.response.send_message(embed=formatter(0))
 
     # @app_commands.command(description="Gets the playoff bracket of a specific event.")
     # @app_commands.describe(event_key="The event key")

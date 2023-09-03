@@ -88,7 +88,7 @@ async def team_events_year(team_key: str, year: int) -> list[Event]:
     return await get_json(f"/team/{team_key}/events/{year}")
 
 
-async def event_predictions(event_key: str) -> EventPredictions:
+async def event_predictions(event_key: str) -> Optional[EventPredictions]:
     return await get_json(f"/event/{event_key}/predictions")
 
 

@@ -79,7 +79,7 @@ class TBACommands(app_commands.Group):
 
         def formatter(page: int):
             page_matches = next_matches[page * self.max_matches_per_page:(page + 1) * self.max_matches_per_page]
-            if (match_predictions := predictions["match_predictions"]) is not None:
+            if predictions is not None and ((match_predictions := predictions["match_predictions"]) is not None):
                 embed = format.format_matches(
                     page_matches, f"Upcoming Matches - {team_number} - Page {page + 1}/{num_pages}", team_number,
                     match_predictions)

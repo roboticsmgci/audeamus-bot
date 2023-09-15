@@ -10,11 +10,11 @@ from audeamus_bot.helpers import format
 from audeamus_bot.helpers.page import Page
 
 
-class TBACommands(app_commands.Group):
-    """Access FRC data through the TBA API."""
+class FRCCommands(app_commands.Group):
+    """Access FRC data and insights."""
 
     def __init__(self, team_number: int, max_matches_per_page: int, *args, **kwargs):
-        super().__init__(*args, **kwargs, name="tba")
+        super().__init__(*args, **kwargs, name="frc")
 
         self.team_number = team_number
         self.max_matches_per_page = max_matches_per_page
@@ -41,7 +41,7 @@ class TBACommands(app_commands.Group):
     @app_commands.describe(event_key="The event key")
     async def predictions(self, interaction: discord.Interaction, event_key: str):
         event_predictions_data = await tba_api.event_predictions(event_key)
-        if event_predictions_data["ranking_predictions"] is None:
+        if event_predictions_data is None or event_predictions_data["ranking_predictions"] is None:
             await interaction.response.send_message("Predictions not available.")
             return
 

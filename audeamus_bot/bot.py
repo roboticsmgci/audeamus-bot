@@ -1,4 +1,4 @@
-from audeamus_bot.commands.command_tree import TBACommandTree
+from audeamus_bot.commands.frc_command_tree import FRCCommandTree
 from audeamus_bot.api import tba_api
 import discord
 
@@ -13,7 +13,7 @@ class AudeamusBot(discord.Client):
 
         self.team_number = team_number
         self.guild = guild
-        self.tree = TBACommandTree(self, team_number, MAX_MATCHES_PER_PAGE)
+        self.tree = FRCCommandTree(self, team_number, MAX_MATCHES_PER_PAGE)
 
     async def setup_hook(self):
         self.tree.copy_global_to(guild=self.guild)
